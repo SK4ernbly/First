@@ -19,7 +19,11 @@ public class AppContext extends Application {
     public void onCreate() {
         // TODO Auto-generated method stub
         super.onCreate();
-        AdapterDB = new AdapterDB(this);
+        try {
+            AdapterDB = new AdapterDB(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static AdapterDB AdapterDB;

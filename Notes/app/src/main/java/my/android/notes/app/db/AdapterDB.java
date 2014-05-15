@@ -4,6 +4,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import my.android.notes.app.enums.OperationType;
 
@@ -12,26 +19,21 @@ import my.android.notes.app.enums.OperationType;
  */
 public class AdapterDB {
 
-    public static final String DB_NAME = "money.db";
-    public static final int DB_VERSION = 1;
-
     private DbHelper dbHelper;
-    private Context context;
     private SQLiteDatabase db;
 
-    public static final String ALIAS_ID="_id";
-    public static final String ALIAS_AMOUNT="amount";
-    public static final String ALIAS_CURRENCY="currency";
-    public static final String ALIAS_OPERATION_DATETIME="operationDateTime";
-    public static final String ALIAS_SOURCE="source";
-    public static final String ALIAS_TYPE="type";
-    public static final String ALIAS_TYPE_ID="type_id";
-    public static final String ALIAS_SOURCE_ID="sourceId";
+    public static final String ALIAS_ID = "_id";
+    public static final String ALIAS_AMOUNT = "amount";
+    public static final String ALIAS_CURRENCY = "currency";
+    public static final String ALIAS_OPERATION_DATETIME = "operationDateTime";
+    public static final String ALIAS_SOURCE = "source";
+    public static final String ALIAS_TYPE = "type";
+    public static final String ALIAS_TYPE_ID = "type_id";
+    public static final String ALIAS_SOURCE_ID = "sourceId";
 
 
+    public AdapterDB(Context context) throws IOException {
 
-    public AdapterDB(Context context){
-        this.context = context;
         dbHelper = new DbHelper(context);
         db = dbHelper.getReadableDatabase();
     }
@@ -43,46 +45,110 @@ public class AdapterDB {
         StringBuilder builder = new StringBuilder();
 
         builder.append("select "
-                + "t.name as "+ALIAS_TYPE
-                + ",s.type_id as "+ALIAS_TYPE_ID
-                + ",o._id as "+ALIAS_ID
+                + "t.name as " + ALIAS_TYPE
+                + ",s.type_id as " + ALIAS_TYPE_ID
+                + ",o._id as " + ALIAS_ID
                 + ",c.short_name as " + ALIAS_CURRENCY
                 + ",o.[amount] as " + ALIAS_AMOUNT
-                + ",o.[operation_datetime] as "+ALIAS_OPERATION_DATETIME
-                + ",s.[name] as "+ALIAS_SOURCE
-                + ",o.[source_id] as "+ALIAS_SOURCE_ID
-                +" from operations o "
+                + ",o.[operation_datetime] as " + ALIAS_OPERATION_DATETIME
+                + ",s.[name] as " + ALIAS_SOURCE
+                + ",o.[source_id] as " + ALIAS_SOURCE_ID
+                + " from operations o "
                 + " inner join spr_currency c on o.currency_id=c.[_id]  "
                 + " inner join spr_operationsource s on o.source_id=s.[_id] "
                 + " inner join spr_operationtype t on s.type_id=t.[_id] ");
 
-        if (type!=OperationType.ALL){
+        if (type != OperationType.ALL) {
             builder.append(" where s.type_id=?");
-            c = db.rawQuery(builder.toString(), new String[] { type.getId() });
-        }else{
+            c = db.rawQuery(builder.toString(), new String[]{type.getId()});
+        } else {
             c = db.rawQuery(builder.toString(), null);
         }
 
         return c;
-
     }
 
 
     private static class DbHelper extends SQLiteOpenHelper {
 
-        public DbHelper(Context context) {
-            super(context, DB_NAME, null, DB_VERSION);
+        public static final String DB_NAME = "money.db";
+        public static final int DB_VERSION = 1;
+        protected Context context;
+        private File dbFile;
 
+        public DbHelper(Context context) throws IOException {
+            super(context, DB_NAME, null, DB_VERSION);
+            this.context = context;
+
+            tryCreateDbFromAssets(context, DB_NAME);
         }
+
+        private void tryCreateDbFromAssets(Context context, String dbName) {
+            dbFile = context.getDatabasePath(dbName).getParentFile();
+
+            if (dbFile.exists()) return;
+            copyDB(context, dbName);
+        }
+
+        private void copyDB(Context context, String dbName) {
+            InputStream myInput = null;
+            OutputStream myOutput = null;
+
+            try {
+                dbFile = new File(context.getApplicationInfo().dataDir + "/databases/" + dbName);
+                dbFile.createNewFile();
+                myInput = context.getAssets().open(dbName);
+                myOutput = new FileOutputStream(dbFile);
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = myInput.read(buffer)) > 0) {
+                    myOutput.write(buffer, 0, length);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    myOutput.flush();
+                    myOutput.close();
+                    myInput.close();
+                } catch (IOException e) {
+                    Log.e(getClass().getName(), e.getMessage());
+                }
+            }
+        }
+
+//        private void copyDataBase() {
+//            InputStream myInput = null;
+//            OutputStream myOutput = null;
+//            try {
+//                myInput = context.getAssets().open(DB_NAME);
+//                myOutput = new FileOutputStream(dbPath);
+//                byte[] buffer = new byte[1024];
+//                int length;
+//                while ((length = myInput.read(buffer)) > 0) {
+//                    myOutput.write(buffer, 0, length);
+//                }
+//
+//            } catch (Exception e) {
+//                Log.e(getClass().getName(), e.getMessage());
+//            } finally {
+//                try {
+//                    myOutput.flush();
+//                    myOutput.close();
+//                    myInput.close();
+//                } catch (IOException e) {
+//                    Log.e(getClass().getName(), e.getMessage());
+//                }
+//            }
+//
+//        }
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
         }
 
     }
