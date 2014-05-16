@@ -54,7 +54,7 @@ public class AdapterDB {
                 + ",s.[name] as " + ALIAS_SOURCE
                 + ",o.[source_id] as " + ALIAS_SOURCE_ID
                 + " from operations o "
-                + " inner join spr_currency c on o.currency_id=c.[_id]  "
+                + " inner join spr_currency c on o.currency_id=c.[_id] "
                 + " inner join spr_operationsource s on o.source_id=s.[_id] "
                 + " inner join spr_operationtype t on s.type_id=t.[_id] ");
 
@@ -74,28 +74,24 @@ public class AdapterDB {
         public static final String DB_NAME = "money.db";
         public static final int DB_VERSION = 1;
         protected Context context;
-        private File dbFile;
 
         public DbHelper(Context context) throws IOException {
             super(context, DB_NAME, null, DB_VERSION);
             this.context = context;
 
-            tryCreateDbFromAssets(context, DB_NAME);
+            tryCopyDB(context, DB_NAME);
         }
 
-        private void tryCreateDbFromAssets(Context context, String dbName) {
-            dbFile = context.getDatabasePath(dbName).getParentFile();
+        private void tryCopyDB(Context context, String dbName) {
+            File dbFile = context.getDatabasePath(dbName);
 
             if (dbFile.exists()) return;
-            copyDB(context, dbName);
-        }
 
-        private void copyDB(Context context, String dbName) {
             InputStream myInput = null;
             OutputStream myOutput = null;
 
             try {
-                dbFile = new File(context.getApplicationInfo().dataDir + "/databases/" + dbName);
+                dbFile.getParentFile().mkdir();
                 dbFile.createNewFile();
                 myInput = context.getAssets().open(dbName);
                 myOutput = new FileOutputStream(dbFile);
@@ -116,32 +112,6 @@ public class AdapterDB {
                 }
             }
         }
-
-//        private void copyDataBase() {
-//            InputStream myInput = null;
-//            OutputStream myOutput = null;
-//            try {
-//                myInput = context.getAssets().open(DB_NAME);
-//                myOutput = new FileOutputStream(dbPath);
-//                byte[] buffer = new byte[1024];
-//                int length;
-//                while ((length = myInput.read(buffer)) > 0) {
-//                    myOutput.write(buffer, 0, length);
-//                }
-//
-//            } catch (Exception e) {
-//                Log.e(getClass().getName(), e.getMessage());
-//            } finally {
-//                try {
-//                    myOutput.flush();
-//                    myOutput.close();
-//                    myInput.close();
-//                } catch (IOException e) {
-//                    Log.e(getClass().getName(), e.getMessage());
-//                }
-//            }
-//
-//        }
 
         @Override
         public void onCreate(SQLiteDatabase db) {
