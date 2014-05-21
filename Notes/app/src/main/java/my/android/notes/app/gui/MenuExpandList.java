@@ -3,6 +3,7 @@ package my.android.notes.app.gui;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
@@ -15,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import my.android.notes.app.R;
+import my.android.notes.app.activity.HttpSpr;
+import my.android.notes.app.activity.MainActivity;
 import my.android.notes.app.adapters.ExpandListAdapter;
 import my.android.notes.app.fragments.OperationsFragment;
 import my.android.notes.app.fragments.SettingsFragment;
@@ -64,10 +67,8 @@ public class MenuExpandList {
                         args.putInt(OPERATION_TYPE, childPosition);
                         fragment.setArguments(args);
 
-                        FragmentManager fragmentManager = context
-                                .getFragmentManager();
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.content_frame, fragment).commit();
+                        FragmentManager fragmentManager = context.getFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
                         break;
                     }
@@ -80,10 +81,13 @@ public class MenuExpandList {
                             FragmentManager fragmentManager = context.getFragmentManager();
                             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
                         }
-                        else
+                        else {
+
+                            Intent intentSpr = new Intent(context, HttpSpr.class);
+                            context.startActivity(intentSpr);
 
 
-
+                        }
                             break;
                     }
 
