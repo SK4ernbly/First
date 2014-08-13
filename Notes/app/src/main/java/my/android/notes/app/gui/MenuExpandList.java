@@ -120,8 +120,7 @@ public class MenuExpandList {
         listGroup.add(context.getResources().getString(R.string.menu3));
 
         List<String> menu1 = new ArrayList<String>();
-        for (String child : context.getResources().getStringArray(
-                R.array.child_menu_operations)) {
+        for (String child : context.getResources().getStringArray(R.array.child_menu_operations)) {
             menu1.add(child);
         }
 

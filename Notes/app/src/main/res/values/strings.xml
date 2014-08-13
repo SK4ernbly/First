@@ -4,6 +4,7 @@
     <string name="app_name">Notations</string>
     <string name="title_activity_main">Notations</string>
     <string name="action_settings">Settings</string>
+    <string name="action_settings_spr">SettingsSPR</string>
     <string name="use_cloud">выберешь меня</string>
     <string name="settings_backup">какая-то настройка</string>
     <string name="title_activity_content">Content</string>

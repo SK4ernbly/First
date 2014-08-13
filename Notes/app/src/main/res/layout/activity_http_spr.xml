@@ -9,8 +9,34 @@
     tools:context="my.android.notes.app.activity.HttpSpr">
 
     <TextView
-        android:text="@string/hello_world"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Text From Site"
+        android:id="@+id/displaySite"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:hint="Введите адресс"
+        android:id="@+id/urlText"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="http://google.com"
+ />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show"
+        android:id="@+id/show_site_button"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/urlText"
+        android:layout_alignBottom="@+id/urlText"
+        android:onClick="clickManage"
+        />
 
 </RelativeLayout>
