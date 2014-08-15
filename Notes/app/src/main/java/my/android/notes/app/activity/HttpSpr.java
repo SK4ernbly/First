@@ -1,14 +1,18 @@
 package my.android.notes.app.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +35,7 @@ public class HttpSpr extends Activity {
 
     private TextView textSite;
     private EditText urlText;
+    private Button goToSite;
 
 
     @Override
@@ -39,6 +44,33 @@ public class HttpSpr extends Activity {
         setContentView(R.layout.activity_http_spr);
         textSite = (TextView) findViewById(R.id.displaySite);
         urlText = (EditText) findViewById(R.id.urlText);
+        goToSite = (Button) findViewById(R.id.go_to_site);
+
+        goToSite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isConnect()) {
+                    Uri address = Uri.parse(urlText.getText().toString());
+                    try {
+                    Intent openLink = new Intent(Intent.ACTION_VIEW, address);
+                    startActivity(openLink);
+                   }
+                   catch (android.content.ActivityNotFoundException e)
+                   {
+                       Toast toast = Toast.makeText(getApplicationContext(), "Can not load the page. Maybe URL is incorrect.", Toast.LENGTH_LONG);
+                       toast.setGravity(Gravity.CENTER, 0,-250);
+                       toast.show();
+
+                   }
+
+                }
+                else {
+                    Toast toast = Toast.makeText(getApplicationContext(), "No connections available", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0,-250);
+                    toast.show();
+                }
+            }
+        });
     }
 
 
@@ -63,12 +95,20 @@ public class HttpSpr extends Activity {
     }
 
 
+    private boolean isConnect(){
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo netwInfo = connManager.getActiveNetworkInfo();
+        if(netwInfo != null && netwInfo.isConnected())
+        return true;
+        else return false;
+    }
+
+
     public void clickManage(View v) {
 
         String stringURL = urlText.getText().toString();
-        ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo netwInfo = connManager.getActiveNetworkInfo();
-        if (netwInfo != null && netwInfo.isConnected()) {
+
+        if (isConnect()) {
             new DownloadWebPage().execute(stringURL);
         } else {
             textSite.setText("No connections available");
@@ -130,12 +170,7 @@ public class HttpSpr extends Activity {
     }
 
     public String convertStream(InputStream strm, int len) throws IOException {
-//        Reader reader = new InputStreamReader(strm, "UTF-8");
-//        char[] buffer = new char[len];
-//        reader.read(buffer);
-//        return new String(buffer);
 
-//        BufferedInputStream bis = new BufferedInputStream(strm);
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
         int result = strm.read();
         while(result != -1) {
@@ -145,6 +180,8 @@ public class HttpSpr extends Activity {
         }
         return buf.toString();
     }
+
+
 
 
 }
