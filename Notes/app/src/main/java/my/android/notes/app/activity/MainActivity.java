@@ -21,10 +21,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (menuExpandableList==null){
-            menuExpandableList = new MenuExpandList(this);
-        }
-
+        menuExpandableList = new MenuExpandList(this);
     }
 
 
