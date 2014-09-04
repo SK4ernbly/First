@@ -15,5 +15,6 @@
     <string name="operations_outcome">Расходы</string>
     <string name="title_activity_http_spr">HttpUrlConn</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_weather">Weather</string>
 
 </resources>

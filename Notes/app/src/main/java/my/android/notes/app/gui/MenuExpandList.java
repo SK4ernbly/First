@@ -18,6 +18,7 @@ import java.util.List;
 import my.android.notes.app.R;
 import my.android.notes.app.activity.HttpSpr;
 import my.android.notes.app.activity.MainActivity;
+import my.android.notes.app.activity.Weather;
 import my.android.notes.app.adapters.ExpandListAdapter;
 import my.android.notes.app.fragments.OperationsFragment;
 import my.android.notes.app.fragments.SettingsFragment;
@@ -93,8 +94,11 @@ public class MenuExpandList {
 
                     case 2: {
                         if (childPosition == 0)
-                            Toast.makeText(context, "Я первый!", Toast.LENGTH_SHORT).show();
-                        else Toast.makeText(context, "А я второй!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Первый!", Toast.LENGTH_SHORT).show();
+                        else {Toast.makeText(context, "Второй!", Toast.LENGTH_LONG).show();
+                            Intent intentWeather = new Intent(context, Weather.class);
+                            context.startActivity(intentWeather);
+                        }
                     }
 
 
