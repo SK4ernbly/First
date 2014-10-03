@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
@@ -47,10 +50,14 @@ public class ExpandListAdapter extends BaseExpandableListAdapter{
         }
 
         TextView txtMenuChild = (TextView) convertView.findViewById(R.id.txtChildMenu);
-
         txtMenuChild.setText(childMenuText);
+        Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 1f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+        animation.setDuration(1000);
+        txtMenuChild.startAnimation(animation);
         return convertView;
     }
+
+
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
@@ -62,6 +69,8 @@ public class ExpandListAdapter extends BaseExpandableListAdapter{
 
         TextView txtMenuGroup = (TextView) convertView.findViewById(R.id.menuItemGroup);
         txtMenuGroup.setText(groupMenuText);
+        Animation animshake = AnimationUtils.loadAnimation(context, R.anim.shake);
+        txtMenuGroup.setAnimation(animshake);
 
         return convertView;
     }

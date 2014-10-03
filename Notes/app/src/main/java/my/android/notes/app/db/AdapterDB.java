@@ -14,9 +14,6 @@ import java.io.OutputStream;
 
 import my.android.notes.app.enums.OperationType;
 
-/**
- * Created by Olya on 10/04/14.
- */
 public class AdapterDB {
 
     private DbHelper dbHelper;

@@ -23,9 +23,7 @@ import my.android.notes.app.adapters.ExpandListAdapter;
 import my.android.notes.app.fragments.OperationsFragment;
 import my.android.notes.app.fragments.SettingsFragment;
 
-/**
- * Created by Olya on 10/04/14.
- */
+
 public class MenuExpandList {
 
     public static final String OPERATION_TYPE = "my.note.android.money.gui.MenuExpList.operationType";
@@ -98,6 +96,7 @@ public class MenuExpandList {
                         else {Toast.makeText(context, "Второй!", Toast.LENGTH_LONG).show();
                             Intent intentWeather = new Intent(context, Weather.class);
                             context.startActivity(intentWeather);
+
                         }
                     }
 

@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,9 +20,7 @@ import my.android.notes.app.enums.OperationType;
 import my.android.notes.app.objects.AppContext;
 import my.android.notes.app.objects.ImgUtils;
 
-/**
- * Created by KolomoetsS on 09.04.2014.
- */
+
 public class OperationsAdapter extends CursorAdapter {
 
     private AppContext appContext;
@@ -87,7 +87,6 @@ public class OperationsAdapter extends CursorAdapter {
         holder.currency = (TextView) view.findViewById(R.id.txt_oper_currency);
 
         view.setTag(holder);
-
         return view;
 
     }

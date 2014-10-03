@@ -12,6 +12,8 @@ public class Weather extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+        overridePendingTransition(R.anim.weather_transl, R.anim.weather_alpha);
+
     }
 
 
@@ -32,5 +34,11 @@ public class Weather extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.weather_transl, R.anim.weather_alpha);
     }
 }
