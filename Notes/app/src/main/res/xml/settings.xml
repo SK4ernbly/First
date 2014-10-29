@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="settings_backup"
+        android:title="@string/settings_backup" >
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="use_cloud"
+            android:title="@string/use_cloud" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
